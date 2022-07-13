@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.Verde-Villa {
+  color: #A0BC32;
+}
+
+.Gris-Villa {
+  color: gray;
+}
