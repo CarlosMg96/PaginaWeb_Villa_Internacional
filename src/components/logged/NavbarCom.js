@@ -40,7 +40,7 @@ export function NavbarCom() {
         >
          {/* Socios */}
          <NavDropdown title="Socios" id="basic-nav-dropdown">
-            <NavDropdown.Item href="#action/3.1">Socios</NavDropdown.Item>
+            <NavDropdown.Item href="/SocioNuevo">Socios</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.2">Ver Socios</NavDropdown.Item>
             <NavDropdown.Item href="/Register">
               Registrar socio

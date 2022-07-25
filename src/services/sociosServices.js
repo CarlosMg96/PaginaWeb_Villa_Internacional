@@ -17,20 +17,20 @@ import {
             return addDoc(sociosCollectionRef, newAd);
         }
         
-        updateAd = (id, updatedAd)=>{
+        updateSocio = (id, updatedAd)=>{
             const adDoc = doc(db, "socios", id);
             return updateDoc(adDoc, updatedAd);
         }
 
-        deleteAd = (id)=>{
+        deleteSocio = (id)=>{
             const adDoc = doc(db, "socios", id);
             return deleteDoc(adDoc);
         }
-        getAllAds = () =>{
+        getAllSocios = () =>{
             return getDocs(sociosCollectionRef);
         }
 
-        getAd = id =>{
+        getSocio = id =>{
             const adDoc = doc(db, "avisos", id);
             return getDoc(adDoc);
         }
