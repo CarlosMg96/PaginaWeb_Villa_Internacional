@@ -1,60 +1,82 @@
 import React, { useState } from "react";
-import AdsDataService from "../../services/ads.service"
+import SociosDataService from "../../services/sociosServices";
 import {Alert} from 'react-bootstrap';
 import NavbarCom from "../../components/logged/NavbarCom";
-import { uploadFilesForAds } from "../../utils/firebase";
 
-function CreateAds({ id, setAdsId }) {
-  const [titulo, setTitulo] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [categoria, setCategoria] = useState("General");
-  const [file, setFile] = useState(null);
+function CreateAds({ id, setsociosId }) {
+  const [noMenbresia, setNoMenbresia] = useState("");
+  const [apelativo, setApelativo] = useState("");
+  const [titular, setTitular] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [tipoPago, setTipoPago] = useState("");
+  const [email, setEmail] = useState("");
+  const [telCelular, setTelcelular] = useState("");
+  const [telCasa, setTelCasa] = useState("");
+  const [casilleros, setCasilleros] = useState("");
+  const [activo, setActivo] = useState("");
+  const [fNacimiento, setFNacimiento] = useState("");
+  const [fIngreso, setFIngreso] = useState("");
+  const [mesAdeudo, setMesAdeudo] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [colonia, setColonia] = useState("");
+  const [ciudad, setCiudad] = useState("");
+  const [cp, setCp] = useState("");
+  const [pais, setPais] = useState("");
+  const [observaciones, setObservaciones] = useState("");
+  const [fotoTitular, setFotoTitular] = useState("");
   const [message, setMessage] = useState({ error: false, msg: "" });
 
   const handleSubmit = async(e) => {
     e.preventDefault();
     setMessage("");
-    if (titulo === "" || descripcion === "" || categoria ==="" ) {
+    if ( apelativo === "" || titular ==="" || tipo === "" || tipoPago ===""
+    || email === "" || telCelular ==="" || telCasa === "" || casilleros ==="" || activo === "" || fNacimiento ===""
+    || fIngreso === "" || colonia ==="" || direccion === "" || ciudad ==="" || cp === "" || pais ===""
+    ) {
       setMessage({ error: true, msg: "¡Todos los campos son obligatorios!" });
       return;
     }
-    
+    const newSocio = {
+      noMenbresia,
+      apelativo,
+      titular,
+      tipo,
+      tipoPago,
+      email,
+      telCelular,
+      telCasa,
+      casilleros,
+      activo,
+      fNacimiento,
+      fIngreso,
+      mesAdeudo,
+      direccion,
+      colonia,
+      ciudad,
+      cp,
+      pais,
+      observaciones,
+      fotoTitular,
+      createdAt:new Date(),
+    };
+    console.log(newSocio);
 
     try {
-
-      const result = await uploadFilesForAds(file)
-      console.log("result: "+ result);
-
-      const newAd = {
-        titulo,
-        descripcion,
-        categoria,
-        createdAt:new Date(),
-        file: result
-      };
-      console.log(newAd);
-
-
       if (id !== undefined && id !== "") {
-        await AdsDataService.updateAd(id, newAd);
+        await SociosDataService.updateAd(id, newAd);
         setAdsId("");
         setMessage({ error: false, msg: "Actualización exitosa!" });
       } else {
-        await AdsDataService.addAd(newAd);
+        await SociosDataService.addAd(newAd);
         setMessage({ error: false, msg: "Nueva aviso añadido!" });
       }
     } catch (err) {
       setMessage({ error: true, msg: err.message });
     }
 
-    setTitulo("");
-    setDescripcion("");
-    setCategoria("");
+    setApelativo(""),
+    setTitular(""),
   };
-
-    function changeCategoria(e){
-      setCategoria(e.target.value);
-    }
 
   return (
     <div>
@@ -103,25 +125,14 @@ function CreateAds({ id, setAdsId }) {
   </div>
   <div class="form-group col-sm-12 col-md-8 mt-2 text-center">
     <label for="formGroupExampleInput">Categoria</label>
-    <p><select value={categoria} onChange={changeCategoria}>
-      <option>General</option>
-      <option>Yoga</option>
-      <option>Hotel</option>
-      <option>Restaurant</option>
-      </select></p>
-      <p>Categoria seleccionada: {categoria}</p>
-  </div>
-
-  <div class="form-group col-sm-12 col-md-8 mt-2 text-center">
-    <label for="formGroupExampleInput2">Archivo</label>
     <input
     className="form-control"
-      type="file"
-      name="file"
-      id="file"
-      placeholder="Subir imagen o documento..."
-      //value={imagen}
-      onChange={e => setFile(e.target.files[0])}
+      type="text"
+      name="categoria"
+      id="categoria"
+      placeholder="Yoga"
+      value={categoria}
+      onChange={(e) => setCategoria(e.target.value)}
     />
   </div>
  

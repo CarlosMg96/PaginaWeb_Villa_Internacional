@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 import {getAuth} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCHI4GgNLM8hgNzDKIdTMGmwfLF8xLbFFs",
@@ -16,3 +18,20 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
+
+export async function uploadImagePromotion(file){
+  const id = v4()
+  const storageRef = ref(storage, `photosPromotion/${id}`);
+  await uploadBytes(storageRef, file)
+  const url = getDownloadURL(storageRef)
+  return url
+};
+
+export async function uploadFilesForAds(file){
+  const id = v4()
+  const storageRef = ref(storage, `filesForAds/${id}`);
+  await uploadBytes(storageRef, file)
+  const url = getDownloadURL(storageRef)
+  return url
+};

@@ -2,42 +2,57 @@ import React, { useState } from "react";
 import PromotionsDataService from "../../services/promotion.services"
 import {Alert} from 'react-bootstrap';
 import NavbarCom from "../../components/logged/NavbarCom";
+import { uploadImagePromotion} from "../../utils/firebase"
 
 function CreatePromotions({ id, setPromotionId }) {
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [Lugar, setLugar] = useState("");
   const [descuento, setDescuento] = useState("");
-  const [imagen, setImagen] = useState("");
+  const [file, setFile] = useState(null);
   const [vigencia, setVigencia] = useState("");
   const [message, setMessage] = useState({ error: false, msg: "" });
+  //const response = imagen
 
   const handleSubmit = async(e) => {
     e.preventDefault();
     setMessage("");
-    if (nombre === "" || descripcion === "" || Lugar ==="" || descuento === "" || vigencia === "" ) {
+    if (nombre === "" || descripcion === "" || Lugar ==="" ||  vigencia === "" ) {
       setMessage({ error: true, msg: "¡Todos los campos son obligatorios!" });
       return;
     }
-    const newPromotion = {
-      nombre,
-      descripcion,
-      Lugar,
-      descuento,
-      vigencia,
-      createdAt:new Date(),
-    };
-    console.log(newPromotion);
+
+    
 
     try {
-      if (id !== undefined && id !== "") {
-        await PromotionsDataService.updatePromotion(id, newPromotion);
-        setPromotionId("");
-        setMessage({ error: false, msg: "Actualización exitosa!" });
-      } else {
-        await PromotionsDataService.addPromotion(newPromotion);
-        setMessage({ error: false, msg: "Nueva promoción añadida!" });
-      }
+ 
+      
+      
+         const result = await uploadImagePromotion(file)
+          console.log("result: "+ result);
+          
+          const newPromotion = {
+            nombre,
+            descripcion,
+            Lugar,
+            descuento,
+            vigencia,
+            createdAt:new Date(),
+            file: result
+          };
+      
+          console.log(newPromotion);
+
+        if (id !== undefined && id !== "") {
+          await PromotionsDataService.updatePromotion(id, newPromotion);
+          setPromotionId("");
+          setMessage({ error: false, msg: "Actualización exitosa!" });
+        } else {
+          await PromotionsDataService.addPromotion(newPromotion);
+          setMessage({ error: false, msg: "Nueva promoción añadida!" });
+        }
+   //   })
+   
     } catch (err) {
       setMessage({ error: true, msg: err.message });
     }
@@ -47,7 +62,21 @@ function CreatePromotions({ id, setPromotionId }) {
     setLugar("");
     setDescuento("");
     setVigencia("");
+    setFile("");
   };
+
+
+ 
+
+  // const saveImage = async(file) => {
+  //   const id = v4()
+  //   const storageRef = ref(storage, `photosPromotion/${id}`);
+  //   uploadBytes(storageRef, file).then(snapshot => {
+  //     console.log(snapshot)
+  //   });
+  // };
+ 
+ 
 
   return (
     <div>
@@ -91,7 +120,7 @@ function CreatePromotions({ id, setPromotionId }) {
       id="descripcion"
       placeholder="Ven y disfuta"
       value={descripcion}
-      onChange={(e) => setDescripcion(e.target.value)}
+      onChange={(e) => setDescripcion(e.target.value) }
     />
   </div>
   <div class="form-group col-sm-12 col-md-8 mt-2 text-center">
@@ -118,6 +147,7 @@ function CreatePromotions({ id, setPromotionId }) {
       onChange={(e) => setDescuento(e.target.value)}
     />
   </div>
+
   <div class="form-group col-sm-12 col-md-8 mt-2 text-center">
     <label for="formGroupExampleInput2">Vigencia</label>
     <input
@@ -130,6 +160,20 @@ function CreatePromotions({ id, setPromotionId }) {
       onChange={(e) => setVigencia(e.target.value)}
     />
   </div>
+
+  <div class="form-group col-sm-12 col-md-8 mt-2 text-center">
+    <label for="formGroupExampleInput2">Imagen</label>
+    <input
+    className="form-control"
+      type="file"
+      name="file"
+      id="file"
+      placeholder="Cargar imagen..."
+      //value={imagen}
+      onChange={e => setFile(e.target.files[0])}
+    />
+  </div>
+
   <div class="form-group col-sm-12 col-md-8 mt-2 text-center">
   <button
     type="submit"
