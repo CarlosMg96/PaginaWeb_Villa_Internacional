@@ -44,4 +44,28 @@ class FileUpload extends Component {
     }
     
 
+    const [noMenbresia, setNoMenbresia] = useState("");
+    const [apelativo, setApelativo] = useState("");
+    const [titular, setTitular] = useState("");
+    const [tipo, setTipo] = useState("");
+    const [tipoPago, setTipoPago] = useState("");
+    const [email, setEmail] = useState("");
+    const [telCelular, setTelcelular] = useState("");
+    const [telCasa, setTelCasa] = useState("");
+    const [casilleros, setCasilleros] = useState("");
+    const [activo, setActivo] = useState("");
+    const [fNacimiento, setFNacimiento] = useState("");
+    const [fIngreso, setFIngreso] = useState("");
+    const [mesAdeudo, setMesAdeudo] = useState("");
+    const [direccion, setDireccion] = useState("");
+    const [colonia, setColonia] = useState("");
+    const [ciudad, setCiudad] = useState("");
+    const [cp, setCp] = useState("");
+    const [pais, setPais] = useState("");
+    const [observaciones, setObservaciones] = useState("");
+    const [fotoTitular, setFotoTitular] = useState("");
+    const [hijo, setHijo] = useState("");
+    const [message, setMessage] = useState({ error: false, msg: "" });
+  
+
 export default FileUpload;

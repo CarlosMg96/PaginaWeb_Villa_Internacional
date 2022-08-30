@@ -35,3 +35,19 @@ export async function uploadFilesForAds(file){
   const url = getDownloadURL(storageRef)
   return url
 };
+
+export async function uploadPhotoSocio(file, titular){
+  const id = v4()
+  const storageRef = ref(storage, `Socio/${titular}${id}`);
+  await uploadBytes(storageRef, file)
+  const url = getDownloadURL(storageRef)
+  return url
+};
+
+export async function uploadPhotoMatrimonio(file, titular){
+  const id = v4()
+  const storageRef = ref(storage, `Socio/Espos@_de_${titular}${id}`);
+  await uploadBytes(storageRef, file)
+  const url = getDownloadURL(storageRef)
+  return url
+};

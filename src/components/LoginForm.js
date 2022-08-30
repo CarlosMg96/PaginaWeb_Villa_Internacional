@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Alert, Button, Form } from "react-bootstrap";
 import logo from "../assets/LOGO.png";
 
-export function LoginForm() {
-  const [user, setUser] = useState({
+export function LoginForm({user}) {
+  const [usuario, setUser] = useState({
     email: "",
     password: "",
   });
@@ -15,20 +15,22 @@ export function LoginForm() {
   const { login } = useAuth();
 
   const handleChange = ({ target: { name, value } }) => {
-    setUser({ ...user, [name]: value });
+    setUser({ ...usuario, [name]: value });
   };
 
   const handleSummit = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      await login(user.email, user.password);
-      navigate("/");
+
+      await login(usuario.email, usuario.password);
+      // if (user.role === 'admin') {
+        console.log("usuar: "+ user);
+         navigate("/");
+      // }
     } catch (error) {
       console.log("No entra");
       console.log(error.code);
-      console.log("email " + setUser.email);
-      console.log("password " + setUser.password);
     }
   };
 

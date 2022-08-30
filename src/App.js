@@ -10,6 +10,7 @@ import Ad from "./stacks/adStack/Ad";
 import { ProtectectRouter } from "./components/ProtectecRouter";
 import CreatePromotions from "./stacks/promocionesStack/CreatePromotion";
 import CreateSocio from "./stacks/sociosStack/CreateSocio";
+import Socios from "./stacks/sociosStack/Socios"
 
 function App() {
   return (
@@ -61,6 +62,14 @@ function App() {
           element={
             <ProtectectRouter>
               <CreateSocio />
+            </ProtectectRouter>
+          }
+        />
+        <Route
+          path="/Socios"
+          element={
+            <ProtectectRouter>
+              <Socios />
             </ProtectectRouter>
           }
         />

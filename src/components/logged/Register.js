@@ -1,28 +1,30 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/LOGO.png";
 import NavbarCom from "./NavbarCom";
 export function Register() {
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-    role: "",
-  });
+  const [user, setUser] = useState(false);
 
   const navigate = useNavigate();
   const [error, setError] = useState();
   const { signup } = useAuth();
 
-  const handleChange = ({ target: { name, value } }) => {
-    setUser({ ...user, [name]: value });
+  //En caso de no funcionar corregir aquí
+  const handleChange = () => {
+    console.log("Hola admin")
   };
 
   const handleSummit = async (e) => {
     e.preventDefault();
+
+    const email = e.target.elements.email.value;
+    const password = e.target.elements.password.value;
+    const role = e.target.elements.role.value
+
+    console.log(email, password, role);
     setError("");
     try {
-      await signup(user.email, user.password);
+      signup(email, password, role);
       navigate("/");
     } catch (error) {
       console.log(error.code);
@@ -69,9 +71,9 @@ export function Register() {
 
         <label>
           Rol:
-          <select id="role">
-            <option value="admin">Administrador</option>
-            <option value="user">Usuario</option>
+          <select name="role" id="role"  onChange={handleChange}>
+            <option name="user" value="user">Socio</option>
+            <option name="admin" value="admin">Administrador</option>
           </select>
         </label>
 
