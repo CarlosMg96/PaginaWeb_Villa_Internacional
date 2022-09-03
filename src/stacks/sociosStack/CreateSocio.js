@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import SociosDataService from "../../services/sociosServices";
-import { Alert } from "react-bootstrap";
+import { Alert, Container, Stack, Col, Row } from "react-bootstrap";
 import NavbarCom from "../../components/logged/NavbarCom";
 import { uploadPhotoMatrimonio, uploadPhotoSocio } from "../../utils/firebase";
+import user from "../../assets/user.png"
 
 function CreateSocio({ id, setSociosId }) {
   const [noMenbresia, setNoMenbresia] = useState(0);
@@ -22,14 +23,14 @@ function CreateSocio({ id, setSociosId }) {
   const [direccion, setDireccion] = useState("");
   const [colonia, setColonia] = useState("");
   const [ciudad, setCiudad] = useState("");
-  const [nombreEs, setNombreEs] = useState("Prueba");
+  const [nombreEs, setNombreEs] = useState("");
   const [cp, setCp] = useState("");
   const [pais, setPais] = useState("");
   const [observaciones, setObservaciones] = useState("");
   const [hijo, setHijo] = useState("0");
   const [importe, setImporte] = useState("");
-  const [file, setFile] = useState(null);
-  const [fileM, setFileM] = useState(null);
+  const [file, setFile] = useState(user);
+  const [fileM, setFileM] = useState(user);
   const [message, setMessage] = useState({ error: false, msg: "" });
 
 
@@ -72,6 +73,8 @@ function CreateSocio({ id, setSociosId }) {
       const resultM = await uploadPhotoMatrimonio(fileM, titular);
       console.log("resultM: " + resultM);
 
+      console.log(estado);
+
       const socio = {
         noMenbresia,
         apelativo,
@@ -83,7 +86,7 @@ function CreateSocio({ id, setSociosId }) {
         telCelular,
         telCasa,
         casilleros,
-        estado,
+        estado: "Activo",
         fNacimiento,
         fIngreso,
         mesAdeudo,
@@ -107,7 +110,8 @@ function CreateSocio({ id, setSociosId }) {
         setMessage({ error: false, msg: "Actualización exitosa!" });
       } else {
          SociosDataService.addDocSocio(socio);
-        setMessage({ error: false, msg: "Nueva socio añadido!" });
+        setMessage({ error: false, msg: "Nuevo socio añadido!" });
+        setNoMenbresia(noMenbresia + 1);
       }
     } catch (err) {
       setMessage({ error: true, msg: err.message });
@@ -165,11 +169,14 @@ function CreateSocio({ id, setSociosId }) {
             </Alert>
           )}
         </div>
-        <div className="container">
-          <div class="row text-center">
-            <form onSubmit={handleSubmit}>
-              <div className="form-row text-center">
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
+            <div>
+
+              <Container>
+              <form onSubmit={handleSubmit}>
+                {/* Bloque 1 */}
+                <Row>
+                  <Col>
+                  <div className="form-group mt-2 text-center">
                   <label for="nombre">Nombre del titular*</label>
                   <input
                     className="form-control"
@@ -181,10 +188,11 @@ function CreateSocio({ id, setSociosId }) {
                     onChange={(e) => setTitular(e.target.value)}
                   />
                 </div>
+                  </Col>
 
-               
-
-                <div className="form-group col-sm-12 col-md-4 col-lg-2 mt-2 text-center">
+                  <Col>
+                  
+                <div className="form-group mt-2 text-center">
                   <label for="formGroupExampleInput2">Apelativo*</label>
                   <p>
                     <select
@@ -207,7 +215,10 @@ function CreateSocio({ id, setSociosId }) {
                   </p>
                   <p>Apelativo seleccionado: {apelativo}</p>
                 </div>
-                <div class="form-group col-sm-12 col-md-4 col-lg-2 mt-2 text-center">
+                  </Col>
+
+                  <Col>
+                  <div class="form-group  mt-2 text-center">
                   <label for="formGroupExampleInput">Tipo* </label>
                   <p>
                     <select value={tipo} onChange={changeTipo}>
@@ -220,7 +231,9 @@ function CreateSocio({ id, setSociosId }) {
                   </p>
                   <p>Tipo seleccionado: {tipo}</p>
                 </div>
-                <div class="form-group col-sm-12 col-md-4 col-lg-2 text-center">
+                  </Col>
+                  <Col>
+                  <div class="form-group mt-2 text-center">
                   <label for="formGroupExampleInput">Tipo* </label>
                   <p>
                     <select value={tipoPago} onChange={changeTipoPago}>
@@ -231,20 +244,13 @@ function CreateSocio({ id, setSociosId }) {
                   <p>Pago seleccionado: {tipoPago}</p>
                 </div>
 
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
-                <label for="nombre">Foto</label>
-                  <input
-                    className="form-control"
-                    type="file"
-                    name="file"
-                    id="file"
-                    placeholder="Subir imagen del titular"
-                    //value={imagen}
-                    onChange={(e) => setFile(e.target.files[0])}
-                  />
-                </div>
+                  </Col>
+                </Row>
 
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
+
+                <Row>
+                  <Col>
+                  <div className="form-group mt-2 text-center">
                   {tipo === "Matrimonial" ? <label for="nombre">Foto del segundo titular</label> : null}
                 {tipo === "Matrimonial" ? 
                   <input
@@ -257,8 +263,10 @@ function CreateSocio({ id, setSociosId }) {
                     onChange={(e) => setFileM(e.target.files[0])}
                   /> : null}
                 </div>
+                  </Col>
 
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
+                  <Col>
+                  <div className="form-group mt-2 text-center">
                   {tipo === "Matrimonial" ? <label for="nombre">Nombre del Espos@</label> : null}
                 {tipo === "Matrimonial" ? 
                   <input
@@ -271,12 +279,30 @@ function CreateSocio({ id, setSociosId }) {
                     onChange={(e) => setNombreEs(e.target.value)}
                   /> : null}
                 </div>
+                  </Col>
 
-                {/* bloque 2 */}
+                </Row>
 
-                
 
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
+                <Row>
+
+                  <Col>
+                  <div className="form-group mt-2 text-center">
+                <label for="nombre">Foto</label>
+                  <input
+                    className="form-control"
+                    type="file"
+                    name="file"
+                    id="file"
+                    placeholder="Subir imagen del titular"
+                    //value={imagen}
+                    onChange={(e) => setFile(e.target.files[0])}
+                  />
+                </div>
+                  </Col>
+
+                  <Col>
+                  <div className="form-group mt-2 text-center">
                   <label for="nombre">Teléfono celular*</label>
                   <input
                     className="form-control"
@@ -288,7 +314,10 @@ function CreateSocio({ id, setSociosId }) {
                     onChange={(e) => setTelcelular(e.target.value)}
                   />
                 </div>
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
+                  </Col>
+
+                  <Col>
+                  <div className="form-group mt-2 text-center">
                   <label for="nombre">Teléfono de casa*</label>
                   <input
                     className="form-control"
@@ -300,75 +329,16 @@ function CreateSocio({ id, setSociosId }) {
                     onChange={(e) => setTelCasa(e.target.value)}
                   />
                 </div>
+                  </Col>
 
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
-                  <label for="nombre">direccion*</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="direccion"
-                    id="direccion"
-                    placeholder="Calle benito juarez o Calzada de Guadalupe"
-                    value={direccion}
-                    onChange={(e) => setDireccion(e.target.value)}
-                  />
-                </div>
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
-                  <label for="nombre">Colonia*</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="colonia"
-                    id="colonia"
-                    placeholder="Los Presidentes"
-                    value={colonia}
-                    onChange={(e) => setColonia(e.target.value)}
-                  />
-                </div>
+                </Row>
 
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
-                  <label for="nombre">Ciudad*</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="ciudad"
-                    id="ciudad"
-                    placeholder="Cuernavaca, Morelos"
-                    value={ciudad}
-                    onChange={(e) => setCiudad(e.target.value)}
-                  />
-                </div>
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
-                  <label for="nombre">Codigo Postal*</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="cp"
-                    id="cp"
-                    placeholder="62589"
-                    value={cp}
-                    onChange={(e) => setCp(e.target.value)}
-                  />
-                </div>
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
-                  <label for="nombre">País*</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="pais"
-                    id="pais"
-                    placeholder="México"
-                    value={pais}
-                    onChange={(e) => setPais(e.target.value)}
-                  />
-                </div>
+                
 
-                {/* bloque 3 */}
-                {/* Al momento de registrat una persona se registra para nuevo usuario
-                  se registrará con todo eseptp 
-                  */}
-
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
+                <Row>
+                  
+                  <Col>
+                  <div className="form-group mt-2 text-center">
                   <label for="nombre">Importe*</label>
                   <input
                     className="form-control"
@@ -380,21 +350,10 @@ function CreateSocio({ id, setSociosId }) {
                     onChange={(e) => setImporte(e.target.value)}
                   />
                 </div>
+                  </Col>
 
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
-                  <label for="nombre">Fecha de Nacimiento*</label>
-                  <input
-                    className="form-control"
-                    type="date"
-                    name="nac"
-                    id="nac"
-                    placeholder="fecha"
-                    value={fNacimiento}
-                    onChange={(e) => setFNacimiento(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
+                  <Col>
+                  <div className="form-group mt-2 text-center">
                   <label for="nombre">Fecha de Ingreso*</label>
                   <input
                     className="form-control"
@@ -406,34 +365,105 @@ function CreateSocio({ id, setSociosId }) {
                     onChange={(e) => setFIngreso(e.target.value)}
                   />
                 </div>
-
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
-                  <label for="nombre">Email del titular*</label>
+                  </Col>
+                  
+                  <Col>
+                  <div className="form-group mt-2 text-center">
+                  <label for="nombre">Fecha de Nacimiento*</label>
                   <input
                     className="form-control"
-                    type="email"
-                    name="emailTitular"
-                    id="emailTitular"
-                    placeholder="email del titular"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="date"
+                    name="nac"
+                    id="nac"
+                    placeholder="fecha"
+                    value={fNacimiento}
+                    onChange={(e) => setFNacimiento(e.target.value)}
                   />
                 </div>
+                  </Col>
+                </Row>
 
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
-                  <label for="nombre">Contraseña*</label>
+                <Row>
+                  <Col>
+                  <div className="form-group mt-2 text-center">
+                  <label for="nombre">direccion*</label>
                   <input
                     className="form-control"
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="********"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    type="text"
+                    name="direccion"
+                    id="direccion"
+                    placeholder="Calle benito juarez o Calzada de Guadalupe"
+                    value={direccion}
+                    onChange={(e) => setDireccion(e.target.value)}
                   />
                 </div>
+                  </Col>
 
-                <div className="form-group col-sm-12 col-md-4 col-lg-2mt-2 text-center">
+                  <Col>
+                  <div className="form-group mt-2 text-center">
+                  <label for="nombre">Colonia*</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="colonia"
+                    id="colonia"
+                    placeholder="Los Presidentes"
+                    value={colonia}
+                    onChange={(e) => setColonia(e.target.value)}
+                  />
+                </div>
+                  </Col>
+
+                  <Col>
+                  <div className="form-group mt-2 text-center">
+                  <label for="nombre">Ciudad*</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="ciudad"
+                    id="ciudad"
+                    placeholder="Cuernavaca, Morelos"
+                    value={ciudad}
+                    onChange={(e) => setCiudad(e.target.value)}
+                  />
+                </div>
+                  </Col>
+
+                </Row>
+
+                <Row>
+                  <Col>
+                  <div className="form-group mt-2 text-center">
+                  <label for="nombre">Codigo Postal*</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="cp"
+                    id="cp"
+                    placeholder="62589"
+                    value={cp}
+                    onChange={(e) => setCp(e.target.value)}
+                  />
+                </div>
+                  </Col>
+
+                  <Col>
+                  <div className="form-group mt-2 text-center">
+                  <label for="nombre">País*</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="pais"
+                    id="pais"
+                    placeholder="México"
+                    value={pais}
+                    onChange={(e) => setPais(e.target.value)}
+                  />
+                </div>
+                  </Col>
+
+                  <Col>
+                  <div className="form-group mt-2 text-center">
                   <label for="nombre">Observaciones</label>
                   <input
                     className="form-control"
@@ -445,10 +475,50 @@ function CreateSocio({ id, setSociosId }) {
                     onChange={(e) => setObservaciones(e.target.value)}
                   />
                 </div>
+                  </Col>
 
-                {/* Este es para el botón summit */}
+                </Row>
 
-                <div class="form-group col-sm-12 col-md-8 mt-2 text-center">
+                <Row>
+
+                <Col>
+                
+
+                  </Col>
+
+                  <Col>
+                   <div className="form-group mt-2 text-center">
+                  <label for="nombre">Email del titular*</label>
+                  <input
+                    className="form-control"
+                    type="email"
+                    name="emailTitular"
+                    id="emailTitular"
+                    placeholder="email del titular"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                  </Col>
+
+                  <Col>
+                  <div className="form-group mt-2 text-center">
+                  <label for="nombre">Contraseña*</label>
+                  <input
+                    className="form-control"
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="********"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                  </Col>
+                </Row>
+
+                  <Row>
+                  <div class="form-group mt-2 text-center">
                   <button
                     type="submit"
                     className="btn"
@@ -456,7 +526,7 @@ function CreateSocio({ id, setSociosId }) {
                       backgroundColor: "#A0BC32",
                       BorderBottomColors: "ffffff",
                       color: "#FFFFFF",
-                      borderRadius: "60",
+                      borderRadius: "80",
                       width: "50%",
                       // marginTop: "30px",
                       margin: "auto",
@@ -465,10 +535,10 @@ function CreateSocio({ id, setSociosId }) {
                     Crear
                   </button>
                 </div>
-              </div>
-            </form>
-          </div>
-        </div>
+                  </Row>
+                  </form>
+              </Container>
+            </div>
       </div>
     </div>
   );

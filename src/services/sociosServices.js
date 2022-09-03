@@ -20,9 +20,9 @@ import {
             return addDoc(sociosCollectionRef, newAd);
         }
         
-        updateSocio = (id, updatedAd)=>{
+        updateSocio = (id, updatedSocio)=>{
             const adDoc = doc(db, "socios", id);
-            return updateDoc(adDoc, updatedAd);
+            return updateDoc(adDoc, updatedSocio);
         }
 
         deleteSocio = (id)=>{
