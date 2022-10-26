@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import AdsDataService from "../../services/ads.service"
 import {Alert} from 'react-bootstrap';
 import NavbarCom from "../../components/logged/NavbarCom";
-import { uploadFilesForAds } from "../../utils/firebase";
+import { uploadFilesForAds, uploadImageAds } from "../../utils/firebase";
 
 function CreateAds({ id, setAdsId }) {
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [categoria, setCategoria] = useState("General");
   const [file, setFile] = useState(null);
+  const [imagen, setImagen] = useState(null);
   const [message, setMessage] = useState({ error: false, msg: "" });
 
   const handleSubmit = async(e) => {
@@ -25,12 +26,15 @@ function CreateAds({ id, setAdsId }) {
       const result = await uploadFilesForAds(file)
       console.log("result: "+ result);
 
+      const resultImage = await uploadImageAds(imagen)
+
       const newAd = {
         titulo,
         descripcion,
         categoria,
         createdAt:new Date(),
-        file: result
+        file: result,
+        imagen: resultImage,
       };
       console.log(newAd);
 
@@ -50,6 +54,8 @@ function CreateAds({ id, setAdsId }) {
     setTitulo("");
     setDescripcion("");
     setCategoria("");
+    setFile("");
+    setImagen("");
   };
 
     function changeCategoria(e){
@@ -119,9 +125,22 @@ function CreateAds({ id, setAdsId }) {
       type="file"
       name="file"
       id="file"
-      placeholder="Subir imagen o documento..."
+      placeholder="Subir documento..."
       //value={imagen}
       onChange={e => setFile(e.target.files[0])}
+    />
+  </div>
+
+  <div class="form-group col-sm-12 col-md-8 mt-2 text-center">
+    <label for="formGroupExampleInput2">Imagen</label>
+    <input
+    className="form-control"
+      type="file"
+      name="Imagen"
+      id="Imagen"
+      placeholder="Subir imagen..."
+      //value={imagen}
+      onChange={e => setImagen(e.target.files[0])}
     />
   </div>
  

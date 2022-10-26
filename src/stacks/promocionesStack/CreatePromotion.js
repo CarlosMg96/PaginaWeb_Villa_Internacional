@@ -26,10 +26,14 @@ function CreatePromotions({ id, setPromotionId }) {
 
     try {
  
+      let result;
       
-      
-         const result = await uploadImagePromotion(file)
+         if (file) {
+          result = await uploadImagePromotion(file)
           console.log("result: "+ result);
+         } else {
+          result = null;
+         }
           
           const newPromotion = {
             nombre,
@@ -95,7 +99,7 @@ function CreatePromotions({ id, setPromotionId }) {
         )}
         </div>
        <div className="container-fluid">
-       <div class="row text-center">
+       <div class="row text-center mx-auto" >
 
 <form onSubmit={handleSubmit}>
   <div className="form-row text-center">

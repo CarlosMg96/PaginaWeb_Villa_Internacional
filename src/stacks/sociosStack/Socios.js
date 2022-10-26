@@ -28,6 +28,10 @@ const SociosList = ({ getSocioId }) => {
   const [socioSelected, setSocioSelected] = useState(null);
   const [idSocio, setIdSocio] = useState("");
 
+  // Ya actualiza todos los campos de la tabla pero se muestra un mensaje de error
+  // Ver esta parte en el siguiente actualización
+  // Prioridad Alta
+
   useEffect(() => {
     setLoading(true);
     getSocios();
@@ -49,13 +53,20 @@ const SociosList = ({ getSocioId }) => {
       -1
   );
 
-  const editHandler = (createSocio) => {
-    setIdSocio(createSocio.id);
-    console.log("llego aqui ");
-    setSocioSelected(new Object(createSocio));
+  // const editHandler = (createSocio, id) => {
+  //   console.log(id);
+  //   console.log(createSocio);
+  //   setIdSocio(createSocio.id);
+  //   console.log("llego aqui ");
+  //   setSocioSelected(new Object(createSocio));
+  //   setOpen(true);
+  //   console.log(createSocio);
+  // };
+
+  const editHandler = async (id) =>{
+    console.log(id);
     setOpen(true);
-    console.log(createSocio);
-  };
+  }
 
   const headerComponent = useMemo(() => {
     const clearText = () => {
@@ -97,22 +108,34 @@ const SociosList = ({ getSocioId }) => {
       showLoaderOnConfirm: true,
       allowOutsideClick: !Alert.isLoading,
       preConfirm: async() => {
-        let sociosUpdated = {};
+         let updatedSocio;
         socios.estado === "Activo"
-          ? (sociosUpdated = {
+          ? (updatedSocio = {
               ...socios,
-              status: { estado: "Inactivo" },
+              estado: "Inactivo" ,
             })
-          : (sociosUpdated = {
+          : (updatedSocio = {
               ...socios,
-              status: { estado: "Activo" },
+              estado: "Activo" ,
             });
-        return SociosDataService.updateSocio(sociosUpdated)
+        // let updatedSocio;
+        // if (socios.estado === "Actvo"){
+        //   updatedSocio={
+        //     estado: "Inactivo"
+        //   }
+        // }else{
+        //   updatedSocio={
+        //     estado: "Activo"
+        //   }
+        // }
+
+        return await SociosDataService.updateSocio(socios.id, updatedSocio)
           .then((response) => {
+            console.log(response);
             if (!response.error) {
               setSocios((asociados) => [
-                sociosUpdated,
-                ...asociados.filter((it) => it.id != socios.id),
+                updatedSocio,
+                ...asociados.filter((it) => it.id !== socios.id),
               ]);
               Alert.fire({
                 title: titleExito,
@@ -248,7 +271,8 @@ const SociosList = ({ getSocioId }) => {
             size={16}
             onClickFunct={() => {
               editHandler(row.id);
-              console.log("este es el row", row);
+              console.log("este es el row", row.id);
+              setIdSocio(row.id)
             }}
           />
           {row.estado === "Activo" ? (
@@ -279,7 +303,8 @@ const SociosList = ({ getSocioId }) => {
     setAbierto(false);
     setOpen(false);
     //Resetear el formulario
-    formik.resetForm();
+    editFormik.resetForm();
+    
   };
 
   const formik = useFormik({
@@ -299,7 +324,7 @@ const SociosList = ({ getSocioId }) => {
   const editFormik = useFormik({
     initialValues: {
       telCasa: "",
-      telCelular: "",
+      telCelular: "7777777777",
       email: "",
       casilleros: "",
       pais: "",
@@ -309,36 +334,36 @@ const SociosList = ({ getSocioId }) => {
       mesAdeudo: "",
       observaciones: "",
     },
-  validationSchema:  yup.object().shape({
-    telCasa: yup
-      .string()
-      .required("Campo obligatorio")
-      .min(10, "Minimo 8 digitos"),
-    telCelular: yup 
-    .string()
-    .required("Campo obligatorio")
-    .min(10, "Minimo 8 digitos"),
-    email: yup
-    .string()
-      .required("Campo obligatorio")
-      .min(6, "Minimo 6 caracteres"),
-    pais: yup
-    .string()
-    .required("Campo obligatorio")
-    .min(3, "Minimo 3 caracteres"),
-    colonia: yup
-    .string()
-    .required("Campo obligatorio")
-    .min(3, "Minimo 3 caracteres"),
-    cp: yup
-    .string()
-    .required("Campo obligatorio")
-    .min(5, "Minimo 5 caracteres"),
-    direccion: yup
-    .string()
-    .required("Campo obligatorio")
-    .min(3, "Minimo 3 caracteres"),
-  }),
+  // validationSchema:  yup.object().shape({
+  //   telCasa: yup
+  //     .string()
+  //     .required("Campo obligatorio")
+  //     .min(10, "Minimo 8 digitos"),
+  //   telCelular: yup 
+  //   .string()
+  //   .required("Campo obligatorio")
+  //   .min(10, "Minimo 10 digitos"),
+  //   email: yup
+  //   .string()
+  //     .required("Campo obligatorio")
+  //     .min(6, "Minimo 6 caracteres"),
+  //   pais: yup
+  //   .string()
+  //   .required("Campo obligatorio")
+  //   .min(3, "Minimo 3 caracteres"),
+  //   colonia: yup
+  //   .string()
+  //   .required("Campo obligatorio")
+  //   .min(3, "Minimo 3 caracteres"),
+  //   cp: yup
+  //   .string()
+  //   .required("Campo obligatorio")
+  //   .min(5, "Minimo 5 caracteres"),
+  //   direccion: yup
+  //   .string()
+  //   .required("Campo obligatorio")
+  //   .min(3, "Minimo 3 caracteres"),
+  // }),
   onSubmit: (values) => {
     Alert.fire({
       title: titleConfirmacion,
@@ -367,22 +392,24 @@ const SociosList = ({ getSocioId }) => {
            observaciones:editFormik.values.observaciones,
            id:idSocio};
         console.log(editFormik.values);
-        if (
-          editFormik.values.telCasa === "" ||
-          editFormik.values.telCelular === "" ||
-          editFormik.values.email === "" ||
-          editFormik.values.pais === "" ||
-          editFormik.values.colonia === "" ||
-          editFormik.values.cp === "" ||
-          editFormik.values.direccion === "" ||
-          editFormik.values.mesAdeudo === "" ||
-          editFormik.values.observaciones === "" 
-        ) {
-          console.log("Campos vacios");
-        } else {
+        console.log("Estamos en el formik" + idSocio);
+        // if (
+        //   editFormik.values.telCasa === "" ||
+        //   editFormik.values.telCelular === "" ||
+        //   editFormik.values.email === "" ||
+        //   editFormik.values.pais === "" ||
+        //   editFormik.values.colonia === "" ||
+        //   editFormik.values.cp === "" ||
+        //   editFormik.values.direccion === "" ||
+        //   editFormik.values.mesAdeudo === "" ||
+        //   editFormik.values.observaciones === "" 
+        // ) {
+        //   console.log("Campos vacios");
+        // } else {
          
           console.log("Carlitos", contactsEdited);
-        return SociosDataService.updateSocio(contactsEdited)
+          console.log(contacto)
+        return SociosDataService.updateSocio(idSocio, contactsEdited)
           .then((response) => {
             if (!response.error) {
               setSocios((contactos) => [
@@ -416,7 +443,7 @@ const SociosList = ({ getSocioId }) => {
               }
             });
           });
-        }
+        // }
 
         
       },

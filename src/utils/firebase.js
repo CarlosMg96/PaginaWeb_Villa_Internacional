@@ -30,8 +30,16 @@ export async function uploadImagePromotion(file){
 
 export async function uploadFilesForAds(file){
   const id = v4()
-  const storageRef = ref(storage, `filesForAds/${id}`);
+  const storageRef = ref(storage, `filesForAds/documentos/${id}`);
   await uploadBytes(storageRef, file)
+  const url = getDownloadURL(storageRef)
+  return url
+};
+
+export async function uploadImageAds(imagen){
+  const id = v4()
+  const storageRef = ref(storage, `photosPromotion/imagenes/${id}`);
+  await uploadBytes(storageRef, imagen)
   const url = getDownloadURL(storageRef)
   return url
 };
