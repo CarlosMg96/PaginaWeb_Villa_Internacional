@@ -20,6 +20,8 @@
     "react-data-table-component": "^7.5.2",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
+    "react-gifted-chat": "^1.0.5",
+    "react-native-gifted-chat": "^1.0.4",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "styled-components": "5.3.3",
