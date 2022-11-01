@@ -624,7 +624,10 @@ const SociosList = ({ getSocioId }) => {
         setTipoPago("");
         setFile(null);
         setFileM(null);
+        setFileMSelect(null);
+        setFileSelect(null);
         getSocios();
+        
       },
     });
   };
