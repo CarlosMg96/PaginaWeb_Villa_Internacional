@@ -71,6 +71,11 @@ import {
                 importe: socio.importe,
                 fileM: socio.fileM,
                 nombreEs: socio.nombreEs, 
+                hijos: socio.hijos,
+                ultimoPa: socio.ultimoPa,
+                nHijos: socio.nHijos,
+                nHijos2: socio.nHijos2,
+                ciudad: socio.ciudad,
                 
             });
                }

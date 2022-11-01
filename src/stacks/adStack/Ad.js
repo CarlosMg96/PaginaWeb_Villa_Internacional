@@ -45,8 +45,42 @@ const AdsList = ({ getAdsId }) => {
   };
 
   const deleteHandler = async (id) => {
-    await AdDataService.deleteAd(id);
-    getAds();
+    Alert.fire({
+      title: titleConfirmacion,
+      text: msjConfirmacion,
+      icon: "warning",
+      confirmButtonText: "Aceptar",
+      confirmButtonColor: "",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "",
+      reverseButtons: true,
+      backdrop: true,
+      showLoaderOnConfirm: true,
+      allowOutsideClick: !Alert.isLoading,
+      preConfirm: async () => {
+        try {
+          await AdDataService.deleteAd(id);
+          getAds();
+          Alert.fire({
+            title: titleExito,
+            text: msjExito,
+            icon: "success",
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "",
+          });
+        } catch (err) {
+          console.log(err);
+          Alert.fire({
+            title: titleError,
+            text: msjError,
+            icon: "warning",
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "",
+          });
+        }
+      },
+    });
   };
 
   const EditAds = async (id) => {
@@ -176,7 +210,7 @@ const AdsList = ({ getAdsId }) => {
                   <td>{doc.descripcion}</td>
                   <td>{doc.categoria}</td>
                   <td>
-                  <ButtonCircle
+                    <ButtonCircle
                       type={"btn btn-warning btn-circle"}
                       icon="edit"
                       size={16}
@@ -188,7 +222,7 @@ const AdsList = ({ getAdsId }) => {
                         setCategoria(doc.categoria);
                       }}
                     />
-                   <ButtonCircle
+                    <ButtonCircle
                       type={"btn btn-circle btn-info me-1"}
                       icon="trash"
                       onClickFunct={() => deleteHandler(doc.id)}

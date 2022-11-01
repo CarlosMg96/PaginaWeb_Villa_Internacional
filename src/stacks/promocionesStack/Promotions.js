@@ -46,9 +46,44 @@ const PromotionsList = ({ getPromotionId }) => {
   };
 
   const deleteHandler = async (id) => {
-    await PromotionsDataService.deletePromotion(id);
-    getPromotions();
+    Alert.fire({
+      title: titleConfirmacion,
+      text: msjConfirmacion,
+      icon: "warning",
+      confirmButtonText: "Aceptar",
+      confirmButtonColor: "",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "",
+      reverseButtons: true,
+      backdrop: true,
+      showLoaderOnConfirm: true,
+      allowOutsideClick: !Alert.isLoading,
+      preConfirm: async () => {
+        try {
+          await PromotionsDataService.deletePromotion(id);
+          getPromotions();
+            Alert.fire({
+              title: titleExito,
+              text: msjExito,
+              icon: "success",
+              confirmButtonText: "Aceptar",
+              confirmButtonColor: "",
+            });
+        } catch (err) {
+          console.log(err);
+          Alert.fire({
+            title: titleError,
+            text: msjError,
+            icon: "warning",
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "",
+          });
+        }
+      }
+    })
   };
+
 
   const EditPromo = async (id) => {
     console.log(id);

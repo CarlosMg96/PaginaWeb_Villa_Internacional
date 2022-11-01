@@ -3,7 +3,7 @@ import SociosDataService from "../../services/sociosServices";
 import { Alert, Container, Stack, Col, Row } from "react-bootstrap";
 import NavbarCom from "../../components/logged/NavbarCom";
 import { uploadPhotoMatrimonio, uploadPhotoSocio } from "../../utils/firebase";
-import user from "../../assets/user.png";
+import userPhoto from "../../assets/user.png";
 
 function CreateSocio({ id, setSociosId }) {
   const [noMenbresia, setNoMenbresia] = useState(0);
@@ -29,12 +29,13 @@ function CreateSocio({ id, setSociosId }) {
   const [observaciones, setObservaciones] = useState("");
   const [hijos, setHijos] = useState("");
   const [importe, setImporte] = useState("");
-  const [file, setFile] = useState(user);
-  const [fileM, setFileM] = useState(user);
+  const [file, setFile] = useState();
+  const [fileM, setFileM] = useState();
   const [message, setMessage] = useState({ error: false, msg: "" });
   const [cantHijos, setCantHijos] = useState("0");
   const [nHijos, setNHijos] = useState("");
   const [nHijos2, setNHijos2] = useState("");
+  const [ultimoPa, setUltimoPa] = useState();
 
   // useEffect(() => {
   //   setNoMenbresia =  + 1;
@@ -72,6 +73,7 @@ function CreateSocio({ id, setSociosId }) {
 
       let result;
       let resultM;
+
       if (file) {
          result = await uploadPhotoSocio(file, titular);
       console.log("result: " + result);
@@ -117,6 +119,9 @@ function CreateSocio({ id, setSociosId }) {
         fileM: resultM,
         createdAt: new Date(),
         hijos,
+        ultimoPa: new Date(),
+        nHijos,
+        nHijos2,
       };
       console.log(socio);
 
@@ -379,10 +384,10 @@ function CreateSocio({ id, setSociosId }) {
                       <input
                         className="form-control"
                         type="text"
-                        name="nombreEs"
-                        id="nombreEs"
+                        name="nHijo"
+                        id="nHijo"
                         placeholder="Nombre del hijo"
-                        value={nombreEs}
+                        value={nHijos}
                         onChange={(e) => setNHijos(e.target.value)}
                       />
                     </>
@@ -398,10 +403,10 @@ function CreateSocio({ id, setSociosId }) {
                       <input
                         className="form-control"
                         type="text"
-                        name="nombreEs"
-                        id="nombreEs"
+                        name="nHijos2"
+                        id="nHijos2"
                         placeholder="Nombre del hijo"
-                        value={nombreEs}
+                        value={nHijos2}
                         onChange={(e) => setNHijos2(e.target.value)}
                       />
                     </>
