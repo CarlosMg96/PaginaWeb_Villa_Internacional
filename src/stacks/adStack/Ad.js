@@ -33,6 +33,8 @@ const AdsList = ({ getAdsId }) => {
   const [categoria, setCategoria] = useState("");
   const [file, setFile] = useState(null);
   const [imagen, setImagen] = useState(null);
+  const [fileSelecter, setFileSelecter] = useState(null);
+  const [imagenSelecter, setImagenSelecter] = useState(null);
 
   useEffect(() => {
     getAds();
@@ -112,17 +114,17 @@ const AdsList = ({ getAdsId }) => {
           let result;
           let resultImage;
 
-          if (file) {
-            result = await uploadFilesForAds(file);
+          if (fileSelecter) {
+            result = await uploadFilesForAds(fileSelecter);
             console.log("result: " + result);
           } else {
-            result = null;
+            result = file;
           }
 
-          if (imagen) {
-            resultImage = await uploadImageAds(imagen);
+          if (imagenSelecter) {
+            resultImage = await uploadImageAds(imagenSelecter);
           } else {
-            resultImage = null;
+            resultImage = imagen;
           }
 
           const newAd = {
@@ -173,8 +175,10 @@ const AdsList = ({ getAdsId }) => {
         setTitulo("");
         setDescripcion("");
         setCategoria("");
-        setFile("");
-        setImagen("");
+        setFile(null);
+        setImagen(null);
+        setFileSelecter();
+        setImagenSelecter();
       },
     });
   };
@@ -197,7 +201,9 @@ const AdsList = ({ getAdsId }) => {
             <tr>
               <th>#</th>
               <th>Título</th>
+              <th>Imagen</th>
               <th>Descripcion</th>
+              <th>Archivo</th>
               <th>Categoria</th>
             </tr>
           </thead>
@@ -207,7 +213,9 @@ const AdsList = ({ getAdsId }) => {
                 <tr key={doc.id}>
                   <td>{index + 1}</td>
                   <td>{doc.titulo}</td>
+                  <td>{doc.imagen ? <Image src={doc.imagen} width="80px" />: null}</td>
                   <td>{doc.descripcion}</td>
+                  <td>{doc.file? <p>Hay Archivo</p>: null}</td>
                   <td>{doc.categoria}</td>
                   <td>
                     <ButtonCircle
@@ -220,6 +228,8 @@ const AdsList = ({ getAdsId }) => {
                         setDescripcion(doc.descripcion);
                         setTitulo(doc.titulo);
                         setCategoria(doc.categoria);
+                        setFile(doc.file);
+                        setImagen(doc.imagen);
                       }}
                     />
                     <ButtonCircle
@@ -299,7 +309,7 @@ const AdsList = ({ getAdsId }) => {
                         id="file"
                         placeholder="Subir documento..."
                         //value={imagen}
-                        onChange={(e) => setFile(e.target.files[0])}
+                        onChange={(e) => setFileSelecter(e.target.files[0])}
                       />
                     </Col>
                   </Row>
@@ -313,7 +323,7 @@ const AdsList = ({ getAdsId }) => {
                         id="Imagen"
                         placeholder="Subir imagen..."
                         //value={imagen}
-                        onChange={(e) => setImagen(e.target.files[0])}
+                        onChange={(e) => setImagenSelecter(e.target.files[0])}
                       />
                     </Col>
                   </Row>

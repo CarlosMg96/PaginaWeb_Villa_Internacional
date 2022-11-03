@@ -31,9 +31,10 @@ const PromotionsList = ({ getPromotionId }) => {
   const [Lugar, setLugar] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [descuento, setDescuento] = useState("");
-  const [file, setFile] = useState("");
+  const [file, setFile] = useState(null);
   const [nombre, setNombre] = useState("");
   const [vigencia, setVigencia] = useState("");
+  const [fileSelect, setFileSelect] = useState(null);
 
   useEffect(() => {
     getPromotions();
@@ -220,7 +221,7 @@ const PromotionsList = ({ getPromotionId }) => {
                         setLugar(doc.Lugar);
                         setDescripcion(doc.descripcion);
                         setDescuento(doc.descuento);
-                        // setFile(doc.file);
+                        setFile(doc.file);
                         setNombre(doc.nombre);
                         setIdPromo(doc.id);
                         setVigencia(doc.vigencia);
@@ -333,7 +334,7 @@ const PromotionsList = ({ getPromotionId }) => {
                         id="file"
                         placeholder="Cargar imagen..."
                         // value={file}
-                        onChange={(e) => setFile(e.target.files[0])}
+                        onChange={(e) => setFileSelect(e.target.files[0])}
                       />
                       {"\n"}
                     </Col>
