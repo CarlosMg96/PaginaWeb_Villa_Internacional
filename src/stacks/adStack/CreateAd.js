@@ -22,11 +22,22 @@ function CreateAds({ id, setAdsId }) {
     
 
     try {
-
-      const result = await uploadFilesForAds(file)
+        let result;
+        let resultImage;
+      if (file) {
+        result = await uploadFilesForAds(file)
+      } else {
+        result = null;
+      }
       console.log("result: "+ result);
 
-      const resultImage = await uploadImageAds(imagen)
+      if (imagen) {
+        resultImage = await uploadImageAds(imagen)
+      } else {
+        resultImage = null;
+      }
+
+     
 
       const newAd = {
         titulo,

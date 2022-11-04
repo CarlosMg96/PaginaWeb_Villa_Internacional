@@ -114,11 +114,11 @@ const PromotionsList = ({ getPromotionId }) => {
         try {
           let result;
 
-          if (file) {
-            result = await uploadImagePromotion(file);
+          if (fileSelect) {
+            result = await uploadImagePromotion(fileSelect);
             console.log("result: " + result);
           } else {
-            result = null;
+            result = file;
           }
 
           const newPromotion = {
@@ -173,6 +173,7 @@ const PromotionsList = ({ getPromotionId }) => {
         setDescuento("");
         setVigencia("");
         setFile("");
+        getPromotions();
       },
     });
   };
@@ -182,6 +183,7 @@ const PromotionsList = ({ getPromotionId }) => {
       <div className="container-fluid">
         <NavbarCom />
         <div className="mb-2">
+          <h1>Lista de promociones</h1>
           <Button variant="dark edit" onClick={getPromotions}>
             Actualizar
           </Button>
@@ -204,7 +206,7 @@ const PromotionsList = ({ getPromotionId }) => {
                 <tr key={doc.id}>
                   <td>{index + 1}</td>
                   <td>
-                    {doc.file ? <Image src={doc.file} width="80px" /> : null}
+                    {doc.file ? <Image src={doc.file} width="80px" height="45px" /> : null}
                   </td>
                   <td>{doc.nombre}</td>
                   <td>{doc.descripcion}</td>

@@ -23,6 +23,7 @@ import Alert, {
   msjError,
   titleError,
 } from "../../pluggins/alert";
+import { Link } from "react-router-dom";
 
 const AdsList = ({ getAdsId }) => {
   const [ads, setAds] = useState([]);
@@ -179,6 +180,7 @@ const AdsList = ({ getAdsId }) => {
         setImagen(null);
         setFileSelecter();
         setImagenSelecter();
+        getAds();
       },
     });
   };
@@ -192,6 +194,7 @@ const AdsList = ({ getAdsId }) => {
       <div className="container-fluid">
         <NavbarCom />
         <div className="mb-2">
+          <h1>Lista de avisos</h1>
           <Button variant="dark edit" onClick={getAds}>
             Actualizar
           </Button>
@@ -213,9 +216,9 @@ const AdsList = ({ getAdsId }) => {
                 <tr key={doc.id}>
                   <td>{index + 1}</td>
                   <td>{doc.titulo}</td>
-                  <td>{doc.imagen ? <Image src={doc.imagen} width="80px" />: null}</td>
+                  <td>{doc.imagen ? <Image src={doc.imagen} width="80px" height="45px"/>: null}</td>
                   <td>{doc.descripcion}</td>
-                  <td>{doc.file? <p>Hay Archivo</p>: null}</td>
+                  <td>{doc.file? <Link to={doc.file}>Hay archivo</Link>: null}</td>
                   <td>{doc.categoria}</td>
                   <td>
                     <ButtonCircle
