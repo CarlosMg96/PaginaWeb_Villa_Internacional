@@ -9,7 +9,7 @@ function CreateSocio({ id, setSociosId }) {
   const [noMenbresia, setNoMenbresia] = useState(0);
   const [apelativo, setApelativo] = useState("");
   const [titular, setTitular] = useState("");
-  const [tipo, setTipo] = useState("");
+  const [tipo, setTipo] = useState("Individual");
   const [tipoPago, setTipoPago] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +27,7 @@ function CreateSocio({ id, setSociosId }) {
   const [cp, setCp] = useState("");
   const [pais, setPais] = useState("");
   const [observaciones, setObservaciones] = useState("");
-  const [hijos, setHijos] = useState("");
+  const [hijos, setHijos] = useState("0");
   const [importe, setImporte] = useState("");
   const [file, setFile] = useState();
   const [fileM, setFileM] = useState();
@@ -35,6 +35,7 @@ function CreateSocio({ id, setSociosId }) {
   const [cantHijos, setCantHijos] = useState("0");
   const [nHijos, setNHijos] = useState("");
   const [nHijos2, setNHijos2] = useState("");
+  const [nHijos3, setNHijos3] = useState("");
   const [ultimoPa, setUltimoPa] = useState();
 
   // useEffect(() => {
@@ -75,20 +76,18 @@ function CreateSocio({ id, setSociosId }) {
       let resultM;
 
       if (file) {
-         result = await uploadPhotoSocio(file, titular);
-      console.log("result: " + result);
+        result = await uploadPhotoSocio(file, titular);
+        console.log("result: " + result);
       } else {
         result = null;
       }
-      
+
       if (fileM) {
-      resultM = await uploadPhotoMatrimonio(fileM, titular);
-      console.log("resultM: " + resultM);
+        resultM = await uploadPhotoMatrimonio(fileM, titular);
+        console.log("resultM: " + resultM);
       } else {
         resultM = null;
       }
-
-       
 
       console.log(estado);
 
@@ -122,6 +121,7 @@ function CreateSocio({ id, setSociosId }) {
         ultimoPa: new Date(),
         nHijos,
         nHijos2,
+        nHijos3,
       };
       console.log(socio);
 
@@ -157,11 +157,14 @@ function CreateSocio({ id, setSociosId }) {
     setEstado("");
     setFNacimiento("");
     setHijos("");
+    setNHijos2("");
+    setNHijos3("");
+    setNHijos("");
     setImporte("");
     setPassword("");
-    setFile("");
+    setFile(null);
     setNombreEs("");
-    setFileM("");
+    setFileM(null);
   };
 
   function changeApelativo(e) {
@@ -172,7 +175,7 @@ function CreateSocio({ id, setSociosId }) {
   }
   function changeTipoPago(e) {
     setTipoPago(e.target.value);
-  }                                                                                                                  
+  }
   function changeHijos(e) {
     setHijos(e.target.value);
   }
@@ -268,7 +271,6 @@ function CreateSocio({ id, setSociosId }) {
                 </Col>
               </Row>
 
-           
               <Row>
                 <Col>
                   <div className="form-group mt-2 text-center">
@@ -355,66 +357,140 @@ function CreateSocio({ id, setSociosId }) {
                   </div>
                 </Col>
                 <Col>
-                <div class="form-group  mt-2 text-center">
-                   {tipo === "Matrimonial" ?( 
-                   <>
-                   <label for="formGroupExampleInput">Cantidad de hijos* </label>
-                    <p>
-                      <select value={hijos} onChange={changeHijos}>
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>más</option>
-                      </select>
-                    </p>
-                    <p>Tipo seleccionado: {hijos}</p>
-                   </>
-                    ):null}
+                  <div class="form-group  mt-2 text-center">
+                    {tipo === "Matrimonial" ? (
+                      <>
+                        <label for="formGroupExampleInput">
+                          Cantidad de hijos* {`\t`} || Tipo seleccionado:{" "}
+                          {hijos}
+                        </label>
+                        <p>
+                          <select value={hijos} onChange={changeHijos}>
+                            <option>0</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>más</option>
+                          </select>
+                        </p>
+                      </>
+                    ) : null}
                   </div>
                 </Col>
               </Row>
-                    
+
               <Row>
-                <Col>
-                <div class="form-group  mt-2 text-center">
-                    {hijos != "0"? (
-                    <>
-                      <label for="formGroupExampleInput">Nombre del hijo 1* </label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        name="nHijo"
-                        id="nHijo"
-                        placeholder="Nombre del hijo"
-                        value={nHijos}
-                        onChange={(e) => setNHijos(e.target.value)}
-                      />
-                    </>
-                    ) : null}
-                </div>
-                </Col>
+                {hijos != "0" ? (
+                  <Col>
+                    <div class="form-group  mt-2 text-center">
+                      <>
+                        <label for="formGroupExampleInput">
+                          Nombre del hijo 1*{" "}
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="nHijo"
+                          id="nHijo"
+                          placeholder="Nombre del hijo"
+                          value={nHijos}
+                          onChange={(e) => setNHijos(e.target.value)}
+                        />
+                      </>
+                    </div>
+                  </Col>
+                ) : null}
 
-                <Col>
-                <div class="form-group  mt-2 text-center">
-                    {( hijos === "2") ?(
-                    <>
-                      <label for="formGroupExampleInput">Nombre del hijo 2* </label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        name="nHijos2"
-                        id="nHijos2"
-                        placeholder="Nombre del hijo"
-                        value={nHijos2}
-                        onChange={(e) => setNHijos2(e.target.value)}
-                      />
-                    </>
-                    ) : null}
-                </div>
-                </Col>
+                {hijos >= "2" ? (
+                  hijos <= "3" ? (
+                    hijos != "0" ? (
+                      <Col>
+                        <div class="form-group  mt-2 text-center">
+                          <>
+                            <label for="formGroupExampleInput">
+                              Nombre del hijo 2*{" "}
+                            </label>
+                            <input
+                              className="form-control"
+                              type="text"
+                              name="nHijos2"
+                              id="nHijos2"
+                              placeholder="Nombre del hijo"
+                              value={nHijos2}
+                              onChange={(e) => setNHijos2(e.target.value)}
+                            />
+                          </>
+                        </div>
+                      </Col>
+                    ) : null
+                  ) : null
+                ) : null}
+
+                {hijos === "más" ? (
+                  <Col>
+                    <div class="form-group  mt-2 text-center">
+                      <>
+                        <label for="formGroupExampleInput">
+                          Nombre del hijo 2*{" "}
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="nHijos2"
+                          id="nHijos2"
+                          placeholder="Nombre del hijo"
+                          value={nHijos2}
+                          onChange={(e) => setNHijos2(e.target.value)}
+                        />
+                      </>
+                    </div>
+                  </Col>
+                ) : null}
+
+                {hijos === "3" ? (
+                  hijos != "0" ? (
+                    <Col>
+                      <div class="form-group  mt-2 text-center">
+                        <>
+                          <label for="formGroupExampleInput">
+                            Nombre del hijo 3*{" "}
+                          </label>
+                          <input
+                            className="form-control"
+                            type="text"
+                            name="nHijos3"
+                            id="nHijos3"
+                            placeholder="Nombre del hijo"
+                            value={nHijos3}
+                            onChange={(e) => setNHijos3(e.target.value)}
+                          />
+                        </>
+                      </div>
+                    </Col>
+                  ) : null
+                ) : null}
+
+                {hijos === "más" ? (
+                  <Col>
+                    <div class="form-group  mt-2 text-center">
+                      <>
+                        <label for="formGroupExampleInput">
+                          Nombre del hijo 3*{" "}
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="nHijos3"
+                          id="nHijos3"
+                          placeholder="Nombre del hijo"
+                          value={nHijos3}
+                          onChange={(e) => setNHijos3(e.target.value)}
+                        />
+                      </>
+                    </div>
+                  </Col>
+                ) : null}
               </Row>
-
 
               <Row>
                 <Col>

@@ -48,6 +48,7 @@ const SociosList = ({ getSocioId }) => {
   const [titular, setTitular] = useState("");
   const [fileSelect, setFileSelect] = useState(null);
   const [fileMSelect, setFileMSelect] = useState(null);
+  const tab = '\u00A0';
 
   // Ya actualiza todos los campos de la tabla pero se muestra un mensaje de error
   // Ver esta parte en el siguiente actualización
@@ -233,6 +234,7 @@ const SociosList = ({ getSocioId }) => {
     {
       name: "#",
       cell: (row, index) => <div>{index + 1}</div>,
+      style:{with: '100px'}
     },
     {
       name: "No. Membresía",
@@ -245,8 +247,8 @@ const SociosList = ({ getSocioId }) => {
           {row.file ? (
             <img
               src={row.file}
-              width="50 px"
-              height="50 px"
+              width="70 px"
+              height="70 px"
               alt="imagenTitular"
             />
           ) : null}
@@ -254,13 +256,20 @@ const SociosList = ({ getSocioId }) => {
       ),
     },
     {
-      name: "Nombre de Titular",
-      cell: (row) => <div>{row.titular}</div>,
+      name: "Titular",
+      cell: (row) =><>
+      <div>{tab}{tab}Nombre: {row.titular}, {'\n'}  {tab}{tab} Correo: {row.email}</div>
+      
+      {/* <p>Nombre: </p>
+      <p></p>
+      <p>Correo:</p>
+      <p>{row.email}</p> */}
+      </>,
     },
-    {
-      name: "Correo",
-      cell: (row) => <div>{row.email}</div>,
-    },
+    // {
+    //   name: "Correo",
+    //   cell: (row) => <div>{row.email}</div>,
+    // },
     {
       name: "Tipo de Pago",
       cell: (row) => (
@@ -297,8 +306,8 @@ const SociosList = ({ getSocioId }) => {
           {row.fileM ? (
             <img
               src={row.fileM}
-              width="50 px"
-              height="50 px"
+              width="70 px"
+              height="70 px"
               alt="imagenEsTitular"
             />
           ) : null}
@@ -347,8 +356,8 @@ const SociosList = ({ getSocioId }) => {
               setColonia(row.colonia);
               setCp(row.cp);
               setDireccion(row.direccion);
+              setFile(row.file);
               setFileM(row.fileM);
-              setFileM(row.file);
               setTelCasa(row.telCasa);
               setTelcelular(row.telCelular);
               setHijos(row.hijos);
@@ -643,6 +652,29 @@ const SociosList = ({ getSocioId }) => {
   function changeHijos(e) {
     setHijos(e.target.value);
   }
+  const customStyles = {
+    rows: {
+        style: {
+            minHeight: '72px', // override the row height
+            maxWidth: '1450px'
+           
+        },
+    },
+    headCells: {
+        style: {
+            paddingLeft: '8px', // override the cell padding for head cells
+            paddingRight: '8px',
+            
+        },
+    },
+    cells: {
+        style: {
+            paddingLeft: '8px', // override the cell padding for data cells
+            paddingRight: '8px',
+            maxWidth: '200px'
+        },
+    },
+};
 
   return (
     <>
@@ -674,6 +706,7 @@ const SociosList = ({ getSocioId }) => {
                 subHeaderComponent={headerComponent}
                 striped={true}
                 highlightOnHover={true}
+             //   customStyles={customStyles}
               />
             </Card.Body>
           </Card>
